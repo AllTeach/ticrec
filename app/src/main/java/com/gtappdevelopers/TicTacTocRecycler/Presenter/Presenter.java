@@ -1,9 +1,16 @@
-package com.gtappdevelopers.gfg;
+package com.gtappdevelopers.TicTacTocRecycler.Presenter;
 
 import android.util.Log;
 
+import com.gtappdevelopers.TicTacTocRecycler.Model.AppConstants;
+import com.gtappdevelopers.TicTacTocRecycler.View.IView;
+import com.gtappdevelopers.TicTacTocRecycler.Model.GameState;
+import com.gtappdevelopers.TicTacTocRecycler.Model.Model;
+import com.gtappdevelopers.TicTacTocRecycler.Model.Move;
+import com.gtappdevelopers.TicTacTocRecycler.Comm.*;
 
-public class Presenter implements IPresenter//,FirebaseComm.IOnFirebaseResult
+
+public class Presenter implements IPresenter,IOnFirebaseResult
 {
     enum GameConfig
     {
@@ -16,7 +23,7 @@ public class Presenter implements IPresenter//,FirebaseComm.IOnFirebaseResult
     private Model model;
     private IView view;
 
- //   private FirebaseComm comm;
+    private FirebaseComm comm;
     private GameConfig gameConfig;
 
 
@@ -25,7 +32,7 @@ public class Presenter implements IPresenter//,FirebaseComm.IOnFirebaseResult
         this.view = view;
         this.model = new Model();
         this.model.startGame();
- //       comm = new FirebaseComm(this);
+        comm = new FirebaseComm(this);
         // default config Man vs Machine...
         gameConfig = GameConfig.LOCAL_1_VS_COMPUTER;
     }
@@ -42,14 +49,14 @@ public class Presenter implements IPresenter//,FirebaseComm.IOnFirebaseResult
     @Override
     public void userRegister(String email, String password) {
 
-    //    comm.createFbUser(email,password);
-     //   comm.registerUser();
+        comm.createFbUser(email,password);
+        comm.registerUser();
 
     }
 
     @Override
     public void userLogin(String email, String password) {
-     //   comm.loginUser(email,password);
+       comm.loginUser(email,password);
 
     }
 
@@ -57,11 +64,11 @@ public class Presenter implements IPresenter//,FirebaseComm.IOnFirebaseResult
     public void startOrJoinGame() {
 
         gameConfig = GameConfig.REMOTE_1_1;
-   //     comm.joinGame();
+        comm.joinGame();
     }
-/*
+
     @Override
-    public void firebaseResult(FirebaseComm.ResultType result, boolean success) {
+    public void firebaseResult(ResultType result, boolean success) {
 
         switch(result)
         {
@@ -76,7 +83,7 @@ public class Presenter implements IPresenter//,FirebaseComm.IOnFirebaseResult
     }
 
     @Override
-    public void firebaseGameInfo(FirebaseComm.ResultType result, boolean success, int row, int col) {
+    public void firebaseGameInfo(ResultType result, boolean success, int row, int col) {
         switch(result) {
             case NO_PENDING_GAMES:
                 // start a new game
@@ -101,8 +108,8 @@ public class Presenter implements IPresenter//,FirebaseComm.IOnFirebaseResult
                 else {
                     // update model with move
                     // update view
-                    this.view.markButton(row,col,computer);
-                    this.model.userTurn(new Move(row,col),computer);
+                    this.view.markButton(row,col,AppConstants.COMPUTER);
+                    this.model.userTurn(new Move(row,col),AppConstants.COMPUTER);
 
                 }
 
@@ -112,8 +119,8 @@ public class Presenter implements IPresenter//,FirebaseComm.IOnFirebaseResult
                 // game has started,
                 // if success this means from other player
                 if(success) {
-                    this.view.markButton(row, col, computer);
-                    this.model.userTurn(new Move(row, col), computer);
+                    this.view.markButton(row, col, AppConstants.COMPUTER);
+                    this.model.userTurn(new Move(row, col), AppConstants.COMPUTER);
                     GameState state =this.model.gameOver();
                     if(  state== GameState.TIE) {
                         //    this.view.displayMessage("No More Turns");
@@ -130,14 +137,14 @@ public class Presenter implements IPresenter//,FirebaseComm.IOnFirebaseResult
         }
     }
 
- */
+
 
     @Override
     public void userClick(int row, int col)
     {
         // create move and pass to model
         Move m = new Move(row,col);
-        boolean ok = this.model.userTurn(m,AppConstants.PLAYER);
+        boolean ok = this.model.userTurn(m, AppConstants.PLAYER);
         if(!ok)
         {
             this.view.displayMessage("Error move");
@@ -181,7 +188,7 @@ public class Presenter implements IPresenter//,FirebaseComm.IOnFirebaseResult
         if(gameConfig == GameConfig.REMOTE_1_1)
         {
             // send FireBase
-            //    comm.makeMove(row,col);
+                comm.makeMove(row,col);
         }
     }
 

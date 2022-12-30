@@ -1,6 +1,5 @@
-package com.gtappdevelopers.gfg;
+package com.gtappdevelopers.TicTacTocRecycler.View;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -10,18 +9,20 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
-import android.widget.ImageView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.gtappdevelopers.TicTacTocRecycler.Model.AppConstants;
+import com.gtappdevelopers.TicTacTocRecycler.Presenter.IPresenter;
+import com.gtappdevelopers.TicTacTocRecycler.Presenter.Presenter;
+import com.gtappdevelopers.TicTacTocRecycler.R;
+
 
 import java.util.ArrayList;
 
@@ -32,6 +33,8 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     private ArrayList<RecyclerData> recyclerDataArrayList;
     RecyclerViewAdapter adapter;
     private IPresenter presenter;
+    private static final String FIXED_PASSWORD = "12345678";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +79,34 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     }
 
     private void initViews() {
+
+        EditText etMail = findViewById(R.id.editTextTextEmailAddress);
         recyclerView=findViewById(R.id.idCourseRV);
+        Button startJoin =findViewById(R.id.btnStartJoin);
+        startJoin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                presenter.startOrJoinGame();
+            }
+        });
+
+        Button btnReg = findViewById(R.id.btnReg);
+        btnReg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!TextUtils.isEmpty(etMail.getText()))
+                {
+
+                    int num = (int)(Math.random()*1000);
+                    String email = etMail.getText().toString();
+                    email = num+email;
+                    String password = FIXED_PASSWORD;
+                    presenter.userRegister(email,password);                }
+
+            }
+        });
+
+
 
 
     }
@@ -93,7 +123,9 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     public void onItemClicked(int pos) {
         Log.d(TAG, "onItemClicked: " + pos);
 
-        presenter.userClick(pos/AppConstants.COLS,pos%AppConstants.COLS);
+        presenter.userClick(pos/ AppConstants.COLS,pos%AppConstants.COLS);
+
+
 
 
     }

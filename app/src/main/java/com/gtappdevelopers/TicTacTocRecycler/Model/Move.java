@@ -1,4 +1,4 @@
-package com.gtappdevelopers.gfg;
+package com.gtappdevelopers.TicTacTocRecycler.Model;
 
 public class Move
 {

@@ -1,13 +1,7 @@
-package com.gtappdevelopers.gfg;
+package com.gtappdevelopers.TicTacTocRecycler.Model;
+
 import java.util.ArrayList;
 
-enum GameState
-{
-    ONGOING,
-    COMPUTER_WIN,
-    PLAYER_WIN,
-    TIE
-};
 public class Model
 {
 
@@ -88,7 +82,7 @@ public class Model
 
     }
 
-    public boolean userTurn(Move m,char letter)
+    public boolean userTurn(Move m, char letter)
     {
         if(board[m.getRow()][m.getCol()]==' ') {
             board[m.getRow()][m.getCol()] = letter;
